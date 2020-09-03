@@ -17,11 +17,16 @@ import os
 import ESFG
 from ESFG import ESFG_Download
 
-# Read elevation and flow direction rasters
+# Incluimos los datos necesarios
 # ----------------------------
-from pysheds.grid import Grid
+OPENID         = 'https://esgf-node.llnl.gov/esgf-idp/openid/username'
+PASSWORD       = 'password'
+SERVER         = 'esgf-data.dkrz.de'
+PROJECT        = 'CMIP5'
+EXPERIMENT     = 'rcp26'
+TIME_FRECUENCY = 'day'
+VARIABLE       = 'tasmax'
+DOMAIN         = 'EUR-11'
+PATH_OUTPUT    = '/mnt/CORDEX/'
 
-grid = Grid.from_raster('n30w100_con', data_name='dem')
-grid.read_raster('n30w100_dir', data_name='dir')
-grid.view('dem')
 ```
