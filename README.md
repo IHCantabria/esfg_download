@@ -10,7 +10,7 @@ Contiene el código generado para descargar los datos de ESFG y además diferent
 * [ESFG_Download](https://github.com/navass11/esfg_download/blob/master/ESFG/ESFG_Download.py) contiene las funciones para la descarga de los datos.
 * [extract_CORDEX_EUR11](https://github.com/navass11/esfg_download/blob/master/ESFG/extract_CORDEX_EUR11.py) extrae los datos sobre una malla o punto dado por el usuario de los datos de CORDEX ya que se encuentran en coordenadas rotadas
 
-## Ejemplo
+## Ejemplo descarga de datos de https://esgf-data.dkrz.de/projects/esgf-dkrz/
 ```python
 import sys
 import os
@@ -28,5 +28,7 @@ TIME_FRECUENCY = 'day'
 VARIABLE       = 'tasmax'
 DOMAIN         = 'EUR-11'
 PATH_OUTPUT    = '/mnt/CORDEX/'
+
+ESFG_Download.download_ESGF_data(OPENID,PASSWORD,SERVER,PROJECT,EXPERIMENT,TIME_FRECUENCY,VARIABLE,DOMAIN,PATH_OUTPUT)
 
 ```
