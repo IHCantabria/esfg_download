@@ -39,3 +39,7 @@ extract_CORDEX_EUR11.extract_CORDEX_EUR11(path_input,path_output=path_output,are
                          point=False,lon_point=None,lat_point=None,name_point=None)
 ```
 ![Image of Yaktocat](https://github.com/navass11/esfg_download/blob/master/SPAIN_CORDEX.png)
+
+## Contenedor Docker para la descarga de datos
+En ocasiones existen problemas con la compatibilidad de librerías según el sistema operativo y la versión de python instalada.
+Para evitar este tipo de problemas se ha desarrollado un contenedor Docker en el cual sólo es necesario incluir los datos del usuario y se realiza la descarga.
