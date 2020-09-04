@@ -46,4 +46,4 @@ extract_CORDEX_EUR11.extract_CORDEX_EUR11(path_input,path_output=path_output,are
 En ocasiones existen problemas con la compatibilidad de librerías según el sistema operativo y la versión de python instalada.
 Para evitar este tipo de problemas se ha desarrollado un contenedor Docker en el cual sólo es necesario incluir los datos del usuario y se realiza la descarga.
 
-El contenedor puede ser descargado del siguiente repositorio: [My Docker](https://hub.docker.com/r/navass11/esfg_download)
+El contenedor puede ser descargado del siguiente repositorio: [esfg_download](https://hub.docker.com/r/navass11/esfg_download)
