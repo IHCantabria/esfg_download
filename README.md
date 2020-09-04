@@ -8,6 +8,14 @@ Contiene el código generado para descargar los datos de ESFG y además diferent
 * [ESFG_Download](https://github.com/navass11/esfg_download/blob/master/ESFG/ESFG_Download.py) contiene las funciones para la descarga de los datos.
 * [extract_CORDEX_EUR11](https://github.com/navass11/esfg_download/blob/master/ESFG/extract_CORDEX_EUR11.py) extrae los datos sobre una malla o punto dado por el usuario de los datos de CORDEX ya que se encuentran en coordenadas rotadas
 
+## Instalación
+Para realizar la instalación de la librería es necesario descargar y descomprimir el fichero.
+Una vez descargado, desde la terminal iremos al directorio donde se sencuentra __setup.py__ y ejecutaremos la siguiente linea:
+```python
+pip install -e.
+```
+De esta forma ya estará instalada la librería
+
 ## Ejemplo descarga de datos de https://esgf-data.dkrz.de/projects/esgf-dkrz/
 ```python
 from ESFG import ESFG_Download
