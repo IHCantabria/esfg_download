@@ -41,6 +41,6 @@ extract_CORDEX_EUR11.extract_CORDEX_EUR11(path_input,path_output=path_output,are
 ![Image of SPAIN](https://github.com/navass11/esfg_download/blob/master/SPAIN_CORDEX.png)
 
 ## Contenedor Docker para la descarga de datos
-![Image of Docker](https://www.google.com/search?q=docker&rlz=1C1GCEA_enES884ES884&sxsrf=ALeKk02pMGIY5uNolKBvJo889_3kGs14MA:1599202210705&tbm=isch&source=iu&ictx=1&fir=2nMpoCD-VQyHIM%252CDb2pxDwN0aZI0M%252C%252Fm%252F0wkcjgj&vet=1&usg=AI4_-kS7Bsax5UsIovhphD9Ur5tbMvEE2Q&sa=X&ved=2ahUKEwieqsW99M7rAhVnCWMBHdHODB0Q_B16BAgYEAI&biw=1920&bih=888#imgrc=2nMpoCD-VQyHIM)
+![Image of Docker](https://www.docker.com/sites/default/files/d8/2019-07/Docker-Logo-White-RGB_Vertical.png)
 En ocasiones existen problemas con la compatibilidad de librerías según el sistema operativo y la versión de python instalada.
 Para evitar este tipo de problemas se ha desarrollado un contenedor Docker en el cual sólo es necesario incluir los datos del usuario y se realiza la descarga.
