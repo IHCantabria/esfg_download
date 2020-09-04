@@ -35,6 +35,7 @@ from ESFG import extract_CORDEX_EUR11
 path_input ='/mnt/CORDEX/'
 path_output ='/home/navass/EUR_11_SPAIN/'
 
-extract_CORDEX_EUR11(path_input,path_output=path_output,area=True,lon_min_area=-10,lat_min_area=32.5,lon_max_area=5,lat_max_area=45,
+extract_CORDEX_EUR11.extract_CORDEX_EUR11(path_input,path_output=path_output,area=True,lon_min_area=-10,lat_min_area=32.5,lon_max_area=5,lat_max_area=45,
                          point=False,lon_point=None,lat_point=None,name_point=None)
 ```
+![Image of Yaktocat](https://github.com/navass11/esfg_download/blob/master/SPAIN_CORDEX.png)
