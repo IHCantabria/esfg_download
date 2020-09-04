@@ -1,12 +1,13 @@
 import rotated_grid_transform
 
-def extract_CORDEX_EUR11(path_output,area=False,lon_min_area=None,lat_min_area=None,lon_max_area=None,lat_max_area=None,point=True,
+ def extract_CORDEX_EUR11(path_input,path_output,area=False,lon_min_area=None,lat_min_area=None,lon_max_area=None,lat_max_area=None,point=True,
                          lon_point=None,lat_point=None,name_point=None):
     """ Esta función permite descargar de G los datos de cambio climático CORDEX de la malla EUR-11 en el punto o area que introduzcamos. La propia función va a elegir el puntos más cercano.
         Además se puede extraer un area seleccionada.
         
         Parámetros:
         --------------------- 
+        path_input   : string. Path donde se encuentran los ficheros netcdf descargados
         path_output  : string. Path donde se desean guardar los resultados
         area         : True o False. Opción para saber que tipo de resultados se quiere resultados en un area
         lon_min_area : float. Longitud mínima del area si area está identificada como True
@@ -46,7 +47,7 @@ def extract_CORDEX_EUR11(path_output,area=False,lon_min_area=None,lat_min_area=N
     for i in tqdm.tqdm(modelos):
         for ex in Experiment:
             for v in variables:
-                direc, root =find('G:/CLIMA/02_HYDRO-CLIMATE/CORDEX/',i[0],i[1],i[2],ex,v)
+                direc, root =find(path_input,i[0],i[1],i[2],ex,v)
                 if area==True:
                     [lon_min_,lat_min_]= rotated_grid_transform((lon_min_area,lat_min_area), 1, (18,-39.25))
                     [lon_max_,lat_max_]= rotated_grid_transform((lon_max_area,lat_max_area), 1, (18,-39.25))
