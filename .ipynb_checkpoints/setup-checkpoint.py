@@ -6,7 +6,7 @@ this_directory = Path(__file__).parent
 with open(this_directory / "README.md", encoding="utf-8") as f:
     long_description = f.read()
 
-setup(name='ESFG_utils',
+setup(name='ESFG',
       packages = find_packages(),
       license = "GPLv3",
       version='0.0.1',

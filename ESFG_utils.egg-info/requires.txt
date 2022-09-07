@@ -1,0 +1,11 @@
+numpy
+pandas
+scipy
+datetime
+matplotlib
+pyyaml
+py-cordex
+esgf-pyclient
+
+[plotting]
+matplotlib>=2.2.0
