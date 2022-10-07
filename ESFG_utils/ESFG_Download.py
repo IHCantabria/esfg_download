@@ -39,7 +39,7 @@ def download_data(path_output,url,size):
                 last_print = time.time()
 
 
-def download_ESGF_data(Open_ID, password, server, project, experiment,time_frequency, variables, domain,lon_min,lat_min,lon_max,lat_max, path_output):
+def download_ESGF_data(Open_ID, password, server, project, experiments,time_frequency, variables, domain,lon_min,lat_min,lon_max,lat_max, path_output):
     """Esta función nos permite descargar masivamente mediante WGET los diferentes ficheros netcdf que contienen los servidrores de ESGF sobre cambio climático.
     
     El servidor por defecto que se va a utilizar es: https://esgf-data.dkrz.de/projects/esgf-dkrz/.
@@ -74,102 +74,119 @@ def download_ESGF_data(Open_ID, password, server, project, experiment,time_frequ
         
     # with open('wget-plantilla-ESGF.sh', "r+") as out_file:
     #     lines = out_file.readlines()
-    for exp in experiment:
-        for v in variables:
-            not_downloaded=True
-            try:
-                if project=='CORDEX':
-                    lm = LogonManager()
-                    lm.logoff()
-                    lm.is_logged_on()
-                    lm.logon_with_openid(Open_ID, password, bootstrap=True)
-                    lm.is_logged_on()
-                    
-                    ctx = conn.new_context(
-                    project=project,
-                    experiment=experiment,
-                    time_frequency=time_frequency,
-                    variable=v,
-                    domain=domain,latest=True)
-                    
-                    info = cx.domain_info("EUR-11")
-                    [lon_min_,lat_min_]= rotated_grid_transform((lon_min,lat_min), 1, (180+info['pollon'],-info['pollat']))
-                    [lon_max_,lat_max_]= rotated_grid_transform((lon_max,lat_max), 1, (180+info['pollon'],-info['pollat']))
-                else:
-                    ctx = conn.new_context(
-                    project=project,
-                    experiment=experiment,
-                    time_frequency=time_frequency,
-                    variable=v,latest=True)
-                if ctx.hit_count==0:
-                    continue
-                else:
-                    variable=v
-                    print('######### Descargando variable '+v+' del experimento '+exp)
-                    for i in tqdm.tqdm(range(0, ctx.hit_count)):
-                        result = ctx.search()[i]
-                        result.dataset_id
-                        files = result.file_context().search()
-                        if len(files)==0:
-                            continue
-                        else:
-                            for file in files:
-                                if variable +'_' in file.download_url:
-                                    url=file.download_url
+    # for exp in experiment:
+    #     for v in variables:
+    not_downloaded=True
+    # try:
+    if project=='CORDEX':
+        lm = LogonManager()
+        lm.logoff()
+        lm.is_logged_on()
+        lm.logon_with_openid(Open_ID, password, bootstrap=True)
+        lm.is_logged_on()
 
-                                    if os.path.exists(path_output+variable+'/'+file.filename):
-                                        not_downloaded=False
-                                    else:
-                                        not_downloaded=True
-                                    nnn=0
-                                    while not_downloaded:
-                                        try:
-                                            print('...................Descargando '+url)
-                                            download_data(path_output+variable+'/'+file.filename+'_erase',file.download_url,file.size)
-                                            ds = xr.open_dataset(path_output+variable+'/'+file.filename+'_erase')
-                                            
-                                            if project=='CORDEX':
-                                                da = ds[variable].load()
-                                                var_ds=list()
-                                                for k in ds[variable].sizes:
-                                                    var_ds.append(k)
-                                                if 'rlon' in var_ds:
-                                                    da = da.sel(rlat=slice(lat_min_-1.5, lat_max_+1.5), 
-                                                                rlon=slice(lon_min_-0.5, lon_max_+0.5))
-                                                    print('...................Descargando '+url)
+        ctx = conn.new_context(
+        project=project,
+        experiment=experiments,
+        time_frequency=time_frequency,
+        variable=variables,
+        domain=domain,
+        latest=True,
+        facets='*')
 
-                                                elif 'lon' in var_ds:
-                                                    da = da.sel(lat=slice(lat_min, lat_max), lon=slice(lon_min, lon_max))
-                                                    print('...................Descargando '+url)
-                                                    
-                                                else:
-                                                    print('Sistema de coordenadas no válido')
-                                                    not_downloaded=False
-                                            else:
-                                                
-                                            #ds = xr.open_dataset(url, engine = "netcdf4")
-                                                ds['lon']=ds.lon-180
-                                                da = ds[variable].load()
-                                                da = da.sel(lat = slice(lat_min, lat_max), lon = da.lon[(da.lon>lon_min) & (da.lon<lon_max)].data)
-                                            #da = da.assign_coords(lon = (((da.lon + 180) % 360) - 180))
-                                            #da = da.roll(lon = (-np.nonzero(da.lon.values < 0)[0][0]), roll_coords=True)
-                                            da.to_netcdf(path_output+variable+'/'+file.filename)
-                                            da.close()
-                                            ds.close()
-                                            os.remove(path_output+variable+'/'+file.filename+'_erase')
-                                            not_downloaded=False
-                                        except:
-                                            print('Try again...')
-                                            nnn=nnn+1
-                                            if nnn>10:
-                                                print('No se ha descargado el fichero')
-                                                break
-            except:
-                continue         
-                
-    
-    
+        info = cx.domain_info(domain)
+        [lon_min_,lat_min_]= rotated_grid_transform((lon_min,lat_min), 1, (180+info['pollon'],-info['pollat']))
+        [lon_max_,lat_max_]= rotated_grid_transform((lon_max,lat_max), 1, (180+info['pollon'],-info['pollat']))
+    elif project=='CMIP6':
+        ctx = conn.new_context(
+        project=project,
+        experiment_id=experiments,
+        frequency=time_frequency,
+        variable=variables,
+        latest=True,
+        facets='*')
+    else:
+        ctx = conn.new_context(
+        project=project,
+        experiment=experiments,
+        time_frequency=time_frequency,
+        variable=variables,
+        latest=True,
+        facets='*')
         
+
+    # variable=v
+    # print('######### Descargando variable '+v+' del experimento '+exp)
+
+    for i in tqdm.tqdm(range(0, ctx.hit_count)):
+        result = ctx.search()[i]
+        result.dataset_id
+        files = result.file_context().search(ignore_facet_check=True)
+
+        for file in files:
+            for v in variables:
+                variable = v
+                # print('######### Descargando variable '+v+' del experimento '+exp)
+                if variable +'_' in file.download_url:
+                    url=file.download_url
+                
+                    if os.path.exists(path_output+'/'+file.filename):
+                        not_downloaded=False
+                    else:
+                        not_downloaded=True
+                    nnn=0
+                    while not_downloaded:
+                        try:
+                            print('...................Descargando '+url)
+                            download_data(path_output+'/'+file.filename+'_erase',file.download_url,file.size)
+                            ds = xr.open_dataset(path_output+'/'+file.filename+'_erase')
+
+                            if project=='CORDEX':
+                                da = ds[variable].load()
+                                var_ds=list()
+                                for k in ds[variable].sizes:
+                                    var_ds.append(k)
+                                if 'rlon' in var_ds:
+                                    da = da.sel(rlat=slice(lat_min_-1.5, lat_max_+1.5), 
+                                                rlon=slice(lon_min_-0.5, lon_max_+0.5))
+                                    print('...................Descargando '+url)
+
+                                elif 'lon' in var_ds:
+                                    da = da.sel(lat=slice(lat_min, lat_max), lon=slice(lon_min, lon_max))
+                                    print('...................Descargando '+url)
+
+                                else:
+                                    print('Sistema de coordenadas no válido')
+                                    not_downloaded=False
+                            else:
+
+                            #ds = xr.open_dataset(url, engine = "netcdf4")
+                                #ds['lon']=ds.lon-180
+                                da = ds[variable].load()
+                                da = da.assign_coords(lon = (((da.lon + 180) % 360) - 180))
+                                da = da.roll(lon = (-np.nonzero(da.lon.values < 0)[0][0]), roll_coords=True) 
+                                da = da.sel(lat = slice(lat_min, lat_max), lon = da.lon[(da.lon>lon_min) & (da.lon<lon_max)].data)
+                            #da = da.assign_coords(lon = (((da.lon + 180) % 360) - 180))
+                            #da = da.roll(lon = (-np.nonzero(da.lon.values < 0)[0][0]), roll_coords=True)
+                            da.to_netcdf(path_output+'/'+file.filename)
+                            da.close()
+                            ds.close()
+                            os.remove(path_output+'/'+file.filename+'_erase')
+                            not_downloaded=False
+                        except:
+                            print('Try again...')
+                            nnn=nnn+1
+                            if nnn>10:
+                                print('No se ha descargado el fichero')
+                                break
+                else:
+                    continue
+    # except:
+    #     print('No se han encontrado ficheros para esta combinación de búsqueda')         
+
+
+
+
 
 
 
